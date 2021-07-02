@@ -1,0 +1,25 @@
+/*** bikes ***/
+.bikes{
+    width: 80%;
+    height: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 36px;
+    padding-bottom: 44px;
+    color: #fff;
+  }
+  .bikes .slide img{
+    width: 65%;
+    margin-bottom: 22px;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 1px 1px 7px indianred, -1px -1px 7px indianred;
+  }
+  .bikes .slide p{
+    width: 80%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .bikes .slide h4{
+    margin-bottom: 14px;
+  }

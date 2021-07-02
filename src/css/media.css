@@ -1,0 +1,27 @@
+@media screen and (max-width: 630px) {
+    .clients-say .slide{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .clients-say .slide img{
+        margin-right: 0;
+        margin-bottom: 22px;
+    }
+    .client-text p{
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+@media screen and (max-width: 500px) {
+    .bikes .slide img{
+        width: 80%;
+    }
+}
+@media screen and (max-width: 390px) {
+    .bikes .slide img{
+        width: 90%;
+    }
+}
