@@ -27,7 +27,7 @@ const ImageSlider = (props) => {
         window.addEventListener("resize", () => {
             setSlideWidth(outer.current.clientWidth)
         })
-    })
+    }, [])
 
     // event handlers
     // prevent right click on container
