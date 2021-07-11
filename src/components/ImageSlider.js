@@ -1,8 +1,11 @@
 import React from 'react'
+import Dots from './Dots'
+import Slide from './Slide'
 import { useState, useRef, useEffect } from 'react'
 
 
 const ImageSlider = (props) => {
+    const dotsComp = useRef()
     const { dots, sliderData } = props
     // store slide width in state
     const [slideWidth, setSlideWidth] = useState(0)
@@ -49,18 +52,8 @@ const ImageSlider = (props) => {
         currentInd = parseInt(elem.dataset.ind)
         currentTranslate = currentInd * -slideWidth
         prevTranslate = currentTranslate
+        
         setSliderPosition()
-
-        changeActiveDot(currentInd)
-    }
-    // select active dot 
-    const changeActiveDot = (currentInd) => {
-        const dots = dotsDiv.current.children
-        Array.from(dots)
-            .forEach((item, i) => {
-                if (i === currentInd) return item.classList.add('active-dot')
-                return item.classList.remove('active-dot')
-            })
     }
     // checking the beginning of swipe (or drag)
     const touchStart = (index) => {
@@ -95,16 +88,14 @@ const ImageSlider = (props) => {
         setPositionByInd()
         cancelAnimationFrame(animationID)
         slider.current.classList.remove('grabbing')
-
-        changeActiveDot(currentInd)
+        // forcing only child component (dots) to rerender without rendering entire component
+        dotsComp.current.toRerender(currentInd)
     }
+
     // utils functions
     // checking event coords depending on device
     const getPosX = (event) => {
         return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX
-    }
-    const insertContent = (obj) => {
-        return { __html: obj }
     }
     // performing animation
     const animation = () => {
@@ -119,39 +110,32 @@ const ImageSlider = (props) => {
     }
     // setting new position (and moving)
     const setPositionByInd = () => {
-        // currentTranslate = currentInd * -window.innerWidth
         currentTranslate = currentInd * -slideWidth
         prevTranslate = currentTranslate
         setSliderPosition()
     }
 
+
     // JSX
     return (
         <div className="outer" ref={outer}>
             <div className="slider-container" ref={slider}>
-                {sliderData.map((slide, index) => {
-                    return <div key={index} className="slide"
-                        style={{ width: slideWidth }}
-                        onMouseDown={touchStart(index)}
-                        onMouseUp={touchEnd}
-                        onTouchStart={touchStart(index)}
-                        onTouchEnd={touchEnd}
-                        onMouseLeave={touchEnd}
-                        onMouseMove={touchMove}
-                        onTouchMove={touchMove}
-                        onDragStart={imgNoDrag}
-                        dangerouslySetInnerHTML={insertContent(slide.content)}
-                    >
-                    </div>
-                })}
+                {sliderData.map((slide, index) => (
+                    <Slide key={index}
+                        index={index}
+                        content={slide.content}
+                        slideWidth={slideWidth}
+                        touchStart={touchStart}
+                        touchEnd={touchEnd}
+                        touchMove={touchMove}
+                        imgNoDrag={imgNoDrag}
+                    />
+                ))}
             </div>
-            <div className="dots" ref={dotsDiv}>
-                {
-                    dots ? (sliderData.map((el, i) => {
-                        return <span key={i} data-ind={i} onClick={clickMove}></span>
-                    })) : ('')
-                }
-            </div>
+            {
+                dots ? (<Dots sliderData={sliderData} clickMove={clickMove} ref={dotsComp} currentInd={currentInd} />) : ('')
+            }
+
         </div> // end outer
     )
 }
